@@ -4,7 +4,7 @@ import { Table } from "../shared/types";
 
 const style = {
   position: "absolute" as "absolute",
-  top: "30%",
+  top: "45%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
@@ -60,8 +60,9 @@ export default function BasicModal(props: Props) {
             </Button>
           </Box>
           <TextField
-            autoFocus
+            maxRows={10}
             multiline
+            sx={{ overflow: "scroll" }}
             size="small"
             fullWidth
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange(e, props.tableInfo.id)}
