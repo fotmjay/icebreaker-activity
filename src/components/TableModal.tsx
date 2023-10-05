@@ -62,7 +62,7 @@ export default function BasicModal(props: Props) {
           <TextField
             maxRows={10}
             multiline
-            sx={{ overflow: "scroll" }}
+            sx={{ overflow: "auto" }}
             size="small"
             fullWidth
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange(e, props.tableInfo.id)}
