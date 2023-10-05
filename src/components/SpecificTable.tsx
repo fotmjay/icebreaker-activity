@@ -1,14 +1,21 @@
 import { Box, Card, Typography, useMediaQuery } from "@mui/material";
+import { Table } from "../shared/types";
 
 type Props = {
-  tableNumber: number;
-  openModal: (number: number) => void;
-  crossedOut: boolean;
+  tableInfo: Table;
+  openModal: (table: Table) => void;
 };
 
-export default function Table(props: Props) {
+export default function SpecificTable(props: Props) {
   const smallMedia = useMediaQuery("(max-width:360px)");
   const circleSize = smallMedia ? "30%" : "22%";
+
+  const crossedOutStyling = {
+    color: "red",
+    textDecoration: "line-through",
+  };
+
+  const stylingToUse = props.tableInfo.crossed ? crossedOutStyling : {};
 
   return (
     <Box sx={{ width: circleSize, aspectRatio: "1/1" }}>
@@ -23,13 +30,12 @@ export default function Table(props: Props) {
         }}
       >
         <Typography
-          color={props.crossedOut ? "rgba(255, 140, 0,1)" : "white"}
-          sx={{ cursor: "pointer" }}
+          sx={{ cursor: "pointer", ...stylingToUse }}
           textAlign="center"
           variant="h4"
-          onClick={() => props.openModal(props.tableNumber)}
+          onClick={() => props.openModal(props.tableInfo)}
         >
-          {props.tableNumber}
+          {props.tableInfo.id + 1}
         </Typography>
       </Card>
     </Box>

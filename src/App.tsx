@@ -1,5 +1,7 @@
 import { Container, CssBaseline, Divider, ThemeProvider, Typography, createTheme } from "@mui/material";
 import TablesContainer from "./components/TablesContainer";
+import CONSTANTS from "./constants/constants";
+import type { Table } from "./shared/types";
 
 const darkTheme = createTheme({
   palette: {
@@ -8,6 +10,12 @@ const darkTheme = createTheme({
 });
 
 function App() {
+  const tableArray: Table[] = [];
+
+  for (let i = 0; i < CONSTANTS.numberOfTable; i++) {
+    tableArray.push({ id: i, note: "", crossed: false });
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -25,7 +33,7 @@ function App() {
         <Typography variant="subtitle2" textAlign="center" paddingBottom="20px">
           Liste des tables
         </Typography>
-        <TablesContainer />
+        <TablesContainer tableArray={tableArray} />
       </Container>
     </ThemeProvider>
   );

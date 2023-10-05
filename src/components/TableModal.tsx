@@ -1,5 +1,6 @@
 import { Box, Typography, Modal, TextField, Button } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
+import { Table } from "../shared/types";
 
 const style = {
   position: "absolute" as "absolute",
@@ -14,55 +15,58 @@ const style = {
 
 type Props = {
   closeModal: () => void;
-  isModalOpen: boolean;
   smallMedia: boolean;
-  tableNumber: number;
-  crossedOut: boolean[];
-  setCrossedOut: Function;
+  tableInfo: Table;
+  setTableInfo: Function;
 };
 
 export default function BasicModal(props: Props) {
-  const [text, setText] = useState<string>(localStorage.getItem(`table${props.tableNumber}`) || "");
-
   const responsiveComponent = { ...style, width: props.smallMedia ? "75%" : "500px" };
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(event.target.value);
-    localStorage.setItem(`table${props.tableNumber}`, event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>, id: number) => {
+    modifyTableInfo(id, "note", event.target.value);
   };
 
   const handleClose = () => {
-    setText("");
     props.closeModal();
   };
 
-  const handleClick = (number: number) => {
-    props.setCrossedOut((crossedOutList: boolean[]) => {
-      const newList = [...crossedOutList];
-      newList[number] = !newList[number];
-      localStorage.setItem("crossedTableList", JSON.stringify(newList));
-      return newList;
+  const handleClick = (id: number) => {
+    modifyTableInfo(id, "crossed");
+  };
+
+  const modifyTableInfo = (id: number, key: string, value: string = "") => {
+    props.setTableInfo((oldTableInfo: Table[]) => {
+      const newTableInfo = [...oldTableInfo];
+      if (key === "crossed") {
+        newTableInfo[id][key] = !newTableInfo[id][key];
+      } else if (key === "note") {
+        newTableInfo[id][key] = value;
+      }
+      return newTableInfo;
     });
   };
 
   return (
     <div>
-      <Modal
-        open={props.isModalOpen}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={responsiveComponent}>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }} paddingBottom="15px">
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              {`Table ${props.tableNumber}`}
+              {`Table ${props.tableInfo.id + 1}`}
             </Typography>
-            <Button variant="outlined" size="small" onClick={() => handleClick(props.tableNumber - 1)}>
-              {props.crossedOut[props.tableNumber - 1] ? "Dérayer" : "Rayer"}
+            <Button variant="outlined" size="small" onClick={() => handleClick(props.tableInfo.id)}>
+              {props.tableInfo.crossed ? "Dérayer" : "Rayer"}
             </Button>
           </Box>
-          <TextField autoFocus multiline size="small" fullWidth onChange={handleChange} value={text} />
+          <TextField
+            autoFocus
+            multiline
+            size="small"
+            fullWidth
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange(e, props.tableInfo.id)}
+            value={props.tableInfo.note}
+          />
         </Box>
       </Modal>
     </div>
