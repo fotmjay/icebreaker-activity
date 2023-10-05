@@ -21,7 +21,7 @@ export default function TablesContainer(props: Props) {
       {tableInfo.map((table: Table) => (
         <SpecificTable tableInfo={table} openModal={openModal} key={table.id} />
       ))}
-      {tableModal && (
+      {tableModal !== null && (
         <TableModal
           tableInfo={tableInfo[tableModal]}
           smallMedia={smallMedia}
