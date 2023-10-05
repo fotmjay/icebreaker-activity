@@ -1,5 +1,5 @@
 import { Box, Typography, Modal, TextField, Button } from "@mui/material";
-import React from "react";
+import React, { SetStateAction } from "react";
 import { Table } from "../shared/types";
 
 const style = {
@@ -17,7 +17,7 @@ type Props = {
   closeModal: () => void;
   smallMedia: boolean;
   tableInfo: Table;
-  setTableInfo: Function;
+  setTableInfo: React.Dispatch<SetStateAction<Table[]>>;
 };
 
 export default function BasicModal(props: Props) {

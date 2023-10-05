@@ -1,5 +1,6 @@
 import { Box, Card, Typography, useMediaQuery } from "@mui/material";
 import { Table } from "../shared/types";
+import CloseIcon from "@mui/icons-material/Close";
 
 type Props = {
   tableInfo: Table;
@@ -10,15 +11,8 @@ export default function SpecificTable(props: Props) {
   const smallMedia = useMediaQuery("(max-width:360px)");
   const circleSize = smallMedia ? "30%" : "22%";
 
-  const crossedOutStyling = {
-    color: "red",
-    textDecoration: "line-through",
-  };
-
-  const stylingToUse = props.tableInfo.crossed ? crossedOutStyling : {};
-
   return (
-    <Box sx={{ width: circleSize, aspectRatio: "1/1" }}>
+    <Box sx={{ position: "relative", width: circleSize, aspectRatio: "1/1" }}>
       <Card
         sx={{
           display: "flex",
@@ -30,13 +24,19 @@ export default function SpecificTable(props: Props) {
         }}
       >
         <Typography
-          sx={{ cursor: "pointer", ...stylingToUse }}
+          sx={{ cursor: "pointer", position: "absolute" }}
           textAlign="center"
           variant="h4"
           onClick={() => props.openModal(props.tableInfo)}
         >
           {props.tableInfo.id + 1}
         </Typography>
+        {props.tableInfo.crossed && (
+          <CloseIcon
+            sx={{ position: "absolute", fontSize: "60px", color: "red" }}
+            onClick={() => props.openModal(props.tableInfo)}
+          />
+        )}
       </Card>
     </Box>
   );
